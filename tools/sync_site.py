@@ -88,6 +88,28 @@ def refresh_manifest() -> dict:
     return data
 
 
+def write_changelog(data: dict) -> None:
+    """Regenerate CHANGELOG.md from the manifest.
+
+    Developers look for a changelog at repo root, not inside a JSON file.
+    Generating it means the two can never disagree.
+    """
+    out = [
+        "# Changelog\n",
+        "All notable changes to this project are documented here.\n",
+        "Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); this",
+        "project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).\n",
+        "> Generated from `game.manifest.json` by `tools/sync_site.py` — edit the",
+        "> manifest, not this file.\n",
+    ]
+    for e in data["changelog"]:
+        out.append(f"\n## [{e['version']}] — {e['date']}\n")
+        out.append(f"**{e['title']}**\n")
+        out.extend(f"- {c}" for c in e["changes"])
+        out.append("")
+    (ROOT / "CHANGELOG.md").write_text("\n".join(out) + "\n", encoding="utf-8")
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--site", required=True, help="path to the linacre.site repo")
@@ -101,6 +123,7 @@ def main() -> int:
         return 2
 
     data = refresh_manifest()
+    write_changelog(data)
     print(f"manifest: {data['stats']['luauModules']} modules, {data['stats']['linesOfLuau']} lines")
 
     jobs = [("game.manifest.json", MANIFEST_DEST)] + ASSETS

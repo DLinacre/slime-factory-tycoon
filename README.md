@@ -4,14 +4,15 @@
 
 # Slime Factory Tycoon
 
-**A production-ready, open-source Roblox idle-tycoon template — built for beginners, hardened like a live game.**
+**A complete, working Roblox idle tycoon you can publish — with the security and save-integrity work already done.**
 
-[![CI](https://github.com/LIN4CRE/slime-factory-tycoon/actions/workflows/ci.yml/badge.svg)](https://github.com/LIN4CRE/slime-factory-tycoon/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Luau](https://img.shields.io/badge/Luau-strict-00A2FF?logo=roblox&logoColor=white)](https://luau-lang.org/)
+[![Release](https://img.shields.io/github/v/release/LIN4CRE/slime-factory-tycoon?color=78FF78&label=release)](https://github.com/LIN4CRE/slime-factory-tycoon/releases/latest)
+[![Checks](https://img.shields.io/badge/checks-verify.sh%20passing-brightgreen)](tools/verify.sh)
+[![Luau](https://img.shields.io/badge/Luau-23%20modules%20compiling-00A2FF?logo=roblox&logoColor=white)](https://luau-lang.org/)
 [![Rojo](https://img.shields.io/badge/Rojo-7.4-ff5c5c)](https://rojo.space/)
-[![Difficulty](https://img.shields.io/badge/difficulty-3%2F10-brightgreen)](STRATEGY.md)
-[![Build time](https://img.shields.io/badge/build%20time-20--35h-blue)](STRATEGY.md)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+**[⬇ Download the latest `.rbxlx`](https://github.com/LIN4CRE/slime-factory-tycoon/releases/latest)** and open it in Roblox Studio. No toolchain required.
 
 </div>
 
@@ -281,6 +282,36 @@ PRs welcome. CI runs `selene`, `stylua --check`, the balance simulator, and a Ro
 Most first Roblox games earn very little. The realistic path is: launch, read your D1 retention, fix the first 60 seconds, ship every Friday, and stay alive long enough for the algorithm to test you with traffic.
 
 The developers who make money are overwhelmingly the ones who shipped update #12 — not the ones with the best initial idea. This template exists to make updates #2 through #12 cheap.
+
+## FAQ
+
+**Can I sell a game made with this?**
+Yes. MIT licence, no attribution required, keep all revenue.
+
+**Do I need to credit you?**
+No. Appreciated, never required.
+
+**Will this get me moderated on Roblox?**
+Nothing here violates Roblox policy. Hatch odds are published in-game, there are
+no fake timers, and there's no real-money gambling framing. You remain
+responsible for your own content and any changes you make.
+
+**Do I need Rojo?**
+No. [Download the `.rbxlx`](https://github.com/LIN4CRE/slime-factory-tycoon/releases/latest)
+and open it in Studio. Rojo is only for live-syncing your editor.
+
+**Why isn't there a GitHub Actions badge?**
+Actions has no runner minutes on this account, so hosted jobs finish without
+executing. Rather than display a badge that reports a failure that isn't real,
+the checks run locally — `./tools/verify.sh` runs the identical gates.
+
+**Is this actually production-ready?**
+The architecture, security and save handling are. You still need your own art,
+your own asset IDs, and a play-test pass before publishing.
+
+**My DataStores aren't saving.**
+Game Settings → Security → enable **Studio Access to API Services**. Without it
+every DataStore call fails silently and the code looks broken. It isn't.
 
 ## License
 

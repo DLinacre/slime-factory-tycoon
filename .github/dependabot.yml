@@ -1,0 +1,15 @@
+version: 2
+updates:
+  # This repo has no npm dependencies by design (Aftman pins the Roblox
+  # toolchain, and balance_sim.py is dependency-free). Actions are the only
+  # supply-chain surface, so that's what we watch.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: "chore(ci)"
+    groups:
+      actions:
+        update-types: ["minor", "patch"]
