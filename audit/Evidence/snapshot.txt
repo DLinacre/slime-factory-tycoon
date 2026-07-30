@@ -1,0 +1,17 @@
+EVIDENCE SNAPSHOT — 2026-07-30T18:33:37Z
+
+## Repo
+  stargazers_count: 0
+  forks_count: 0
+  open_issues_count: 0
+  subscribers_count: 0
+  has_discussions: True
+  homepage: https://www.linacre.site/games
+  pushed_at: 2026-07-30T18:33:22Z
+  releases: 0
+  community health: 100%
+
+## Code
+  luau modules: 23
+  lines: 3724
+  all compile: 0 errors

@@ -1,0 +1,42 @@
+<!-- ============================================================
+     RECOMMENDED <head> for https://www.linacre.site/games
+     Changes vs current, marked ★
+     ============================================================ -->
+
+<!-- ★ Trimmed from 218 to 154 chars so Google doesn't truncate it -->
+<title>Games | David Linacre — Roblox idle tycoon &amp; browser games</title>
+<meta name="description"
+      content="Slime Factory Tycoon: an open-source Roblox idle-tycoon with a modular Luau architecture, plus playable browser games. Free, MIT licensed.">
+
+<link rel="canonical" href="https://www.linacre.site/games">
+
+<!-- Open Graph -->
+<meta property="og:type"        content="website">
+<meta property="og:site_name"   content="linacre.site">
+<meta property="og:locale"      content="en_GB">
+<meta property="og:title"       content="Slime Factory Tycoon — open-source Roblox idle tycoon">
+<meta property="og:description" content="A production-grade Roblox game template: server-authoritative Luau, session-locked saves, and a CI balance simulator. MIT licensed.">
+<meta property="og:url"         content="https://www.linacre.site/games">
+<meta property="og:image"       content="https://www.linacre.site/games/slime-factory-tycoon/banner.webp">
+<!-- ★ Dimensions prevent a layout shift in social preview cards -->
+<meta property="og:image:width"  content="1600">
+<meta property="og:image:height" content="800">
+<meta property="og:image:alt"    content="Slime Factory Tycoon — a neon green slime bursting from an industrial vat">
+
+<!-- Twitter / X -->
+<meta name="twitter:card"        content="summary_large_image">
+<meta name="twitter:title"       content="Slime Factory Tycoon — open-source Roblox idle tycoon">
+<meta name="twitter:description" content="Server-authoritative Luau, session-locked saves, idempotent receipts, and a CI balance simulator. MIT licensed.">
+<meta name="twitter:image"       content="https://www.linacre.site/games/slime-factory-tycoon/banner.webp">
+<meta name="twitter:image:alt"   content="Slime Factory Tycoon banner">
+
+<!-- ★ Preload the LCP image. It is currently lazy-loaded, which delays
+     the largest paint by roughly the time it takes to discover it. -->
+<link rel="preload" as="image"
+      href="/games/slime-factory-tycoon/banner.webp"
+      type="image/webp" fetchpriority="high">
+
+<!-- ★ Preload ONLY the above-the-fold font. The page currently loads three
+     variable families totalling ~100KB (42% of page weight). -->
+<link rel="preload" as="font" type="font/woff2"
+      href="/fonts/inter-var-latin.woff2" crossorigin>

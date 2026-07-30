@@ -1,0 +1,31 @@
+{
+  "$comment": "Add to /games. Complements the existing VideoGame markup on the showcase component. Every field below is verifiable from the repository — no invented ratings, prices, or download counts.",
+  "@context": "https://schema.org",
+  "@type": "SoftwareSourceCode",
+  "name": "Slime Factory Tycoon",
+  "description": "An open-source Roblox idle-tycoon template built on a modular Luau service architecture with declarative networking, session-locked DataStores, idempotent purchase handling, and a CI balance simulator.",
+  "codeRepository": "https://github.com/LIN4CRE/slime-factory-tycoon",
+  "programmingLanguage": {
+    "@type": "ComputerLanguage",
+    "name": "Luau",
+    "url": "https://luau-lang.org/"
+  },
+  "runtimePlatform": "Roblox",
+  "license": "https://opensource.org/licenses/MIT",
+  "codeSampleType": "full solution",
+  "author": {
+    "@type": "Person",
+    "name": "David Linacre",
+    "url": "https://www.linacre.site"
+  },
+  "maintainer": {
+    "@type": "Person",
+    "name": "David Linacre",
+    "url": "https://www.linacre.site"
+  },
+  "dateCreated": "2026-07-30",
+  "dateModified": "2026-07-30",
+  "keywords": "roblox, luau, idle game, tycoon, game template, rojo, open source",
+  "image": "https://www.linacre.site/games/slime-factory-tycoon/banner.webp",
+  "isAccessibleForFree": true
+}

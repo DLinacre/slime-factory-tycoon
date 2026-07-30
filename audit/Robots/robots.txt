@@ -1,0 +1,38 @@
+# linacre.site — current file is already well-formed.
+# This is the RECOMMENDED version with three additions, marked ★.
+
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /dashboard
+Disallow: /contact/thanks
+
+# ★ Prevent duplicate-content crawling of build artefacts
+Disallow: /assets/
+Disallow: /*.json$
+
+# Explicitly allow AI crawlers that drive referral traffic
+User-agent: GPTBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+# Block bulk scrapers that give nothing back
+User-agent: CCBot
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+# ★ Slow down aggressive SEO crawlers that burn Vercel bandwidth
+User-agent: AhrefsBot
+Crawl-delay: 10
+
+User-agent: SemrushBot
+Crawl-delay: 10
+
+Sitemap: https://www.linacre.site/sitemap.xml
