@@ -13,20 +13,28 @@
 local MarketplaceService = game:GetService("MarketplaceService")
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Modules = ReplicatedStorage:WaitForChild("Modules")
 
-local GameConfig = require(ReplicatedStorage.Modules.GameConfig)
+local GameConfig = require(Modules.GameConfig)
+local Net = require(Modules.Net)
+local Registry = require(Modules.ServiceRegistry)
 local DataManager = require(script.Parent.DataManager)
 local EconomyService = require(script.Parent.EconomyService)
 
 local MonetizationService = {}
 
 local passCache: { [Player]: { [string]: boolean } } = {}
-local Remotes
-
-function MonetizationService.setRemotes(r) Remotes = r end
 
 -- Gamepass ownership is checked ONCE at join, then cached. Calling
 -- UserOwnsGamePassAsync every frame will get you rate-limited.
+function MonetizationService:onPlayerAdded(player: Player)
+	MonetizationService.setupPlayer(player)
+end
+
+function MonetizationService:onPlayerRemoving(player: Player)
+	MonetizationService.cleanupPlayer(player)
+end
+
 function MonetizationService.setupPlayer(player: Player)
 	local cache = {}
 	passCache[player] = cache
@@ -74,8 +82,11 @@ local function grantProduct(player: Player, productName: string): boolean
 		EconomyService.rebirth(player)
 	end
 	if productName == "SkipEggCd" then
-		local PetService = require(script.Parent.PetService)
-		PetService.clearCooldown(player)
+		Registry.get("PetService").clearCooldown(player)
+	end
+	-- Robux cosmetics: the product id is looked up by cosmetic id
+	if def.cosmetic then
+		Registry.get("CosmeticService"):grant(player, def.cosmetic)
 	end
 	return true
 end
@@ -87,7 +98,7 @@ local function productNameFromId(id: number): string?
 	return nil
 end
 
-function MonetizationService.init()
+function MonetizationService:start()
 	MarketplaceService.ProcessReceipt = function(receiptInfo)
 		local player = Players:GetPlayerByUserId(receiptInfo.PlayerId)
 		if not player then
@@ -129,7 +140,7 @@ function MonetizationService.init()
 			return Enum.ProductPurchaseDecision.NotProcessedYet
 		end
 
-		Remotes.PurchaseSuccess:FireClient(player, name)
+		Net.fireClient("PurchaseSuccess", player, name)
 		return Enum.ProductPurchaseDecision.PurchaseGranted
 	end
 
@@ -142,7 +153,7 @@ function MonetizationService.init()
 		for name, pass in GameConfig.Gamepasses do
 			if pass.id == passId then
 				cache[name] = true
-				Remotes.PurchaseSuccess:FireClient(player, name)
+				Net.fireClient("PurchaseSuccess", player, name)
 			end
 		end
 	end)

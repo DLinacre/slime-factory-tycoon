@@ -12,15 +12,20 @@
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Modules = ReplicatedStorage:WaitForChild("Modules")
 
-local GameConfig = require(ReplicatedStorage.Modules.GameConfig)
+local Net = require(Modules.Net)
+local Registry = require(Modules.ServiceRegistry)
 local DataManager = require(script.Parent.DataManager)
 
 local CodeService = {}
 
-local Remotes, Economy, Pets
-function CodeService.inject(r, e, p)
-	Remotes, Economy, Pets = r, e, p
+local Economy, Pets
+
+function CodeService:start()
+	Economy = Registry.get("EconomyService")
+	Pets = Registry.get("PetService")
+	Net.onServer("RedeemCode", function(player, code) CodeService.redeem(player, code) end)
 end
 
 -- Add a row per update. `expires` is a unix timestamp, or nil for permanent.
@@ -52,18 +57,18 @@ function CodeService.redeem(player: Player, rawCode: any)
 	local def = CODES[code]
 
 	if not def then
-		Remotes.CodeResult:FireClient(player, false, "Invalid code!")
+		Net.fireClient("CodeResult", player, false, "Invalid code!")
 		return
 	end
 
 	if def.expires and os.time() > def.expires then
-		Remotes.CodeResult:FireClient(player, false, "That code has expired!")
+		Net.fireClient("CodeResult", player, false, "That code has expired!")
 		return
 	end
 
 	data.redeemedCodes = data.redeemedCodes or {}
 	if data.redeemedCodes[code] then
-		Remotes.CodeResult:FireClient(player, false, "Already redeemed!")
+		Net.fireClient("CodeResult", player, false, "Already redeemed!")
 		return
 	end
 
@@ -83,7 +88,7 @@ function CodeService.redeem(player: Player, rawCode: any)
 		table.insert(parts, ("a %s pet"):format(def.rarity))
 	end
 
-	Remotes.CodeResult:FireClient(player, true, "Redeemed: " .. table.concat(parts, ", "))
+	Net.fireClient("CodeResult", player, true, "Redeemed: " .. table.concat(parts, ", "))
 end
 
 -- Lets the client grey out codes it already used without leaking the full list.

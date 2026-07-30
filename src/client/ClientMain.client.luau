@@ -19,12 +19,17 @@ local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 
 local player = Players.LocalPlayer
-local Remotes = ReplicatedStorage:WaitForChild("Remotes")
 local Modules = ReplicatedStorage:WaitForChild("Modules")
 
 local GameConfig = require(Modules.GameConfig)
 local Format = require(Modules.Format)
+local Net = require(Modules.Net)
+local Theme = require(Modules.Theme)
+local UI = require(script.Parent:WaitForChild("UI"))
+local AudioEngine = require(script.Parent:WaitForChild("AudioEngine"))
 local UIBuilder = require(script.Parent:WaitForChild("UIBuilder"))
+
+AudioEngine.init()
 
 -- ============================================================ local state
 local state = {
@@ -68,7 +73,7 @@ end
 
 local function refreshPets()
 	UIBuilder.renderPets(ui, state.pets, state.equipped, function(uid)
-		Remotes.EquipPet:FireServer(uid)
+		Net.fireServer("EquipPet", uid)
 	end)
 end
 
@@ -80,6 +85,7 @@ local function onTap()
 	displayedGoo += state.clickPower
 	refreshTopBar()
 	UIBuilder.popText(ui, "+" .. Format.number(state.clickPower))
+	AudioEngine.playTap()
 	-- squash-and-stretch feedback: cheap, and it makes the tap feel good
 	local t = TweenService:Create(ui.vatButton, TweenInfo.new(0.08), { Size = ui.vatSizeDown })
 	t:Play()
@@ -100,7 +106,7 @@ task.spawn(function()
 	while true do
 		task.wait(GameConfig.ClickBatchWindow)
 		if pendingClicks > 0 then
-			Remotes.Click:FireServer(pendingClicks)
+			Net.fireServer("Click", pendingClicks)
 			pendingClicks = 0
 		end
 	end
@@ -111,35 +117,35 @@ for _, def in GameConfig.Upgrades do
 	local row = ui.upgradeRows[def.id]
 	if row then
 		row.button.MouseButton1Click:Connect(function()
-			Remotes.BuyUpgrade:FireServer(def.id, ui.buyAmount.value)
+			Net.fireServer("BuyUpgrade", def.id, ui.buyAmount.value)
 		end)
 	end
 end
 
 ui.rebirthButton.MouseButton1Click:Connect(function()
-	Remotes.Rebirth:FireServer()
+	Net.fireServer("Rebirth")
 end)
 
 ui.hatchButton.MouseButton1Click:Connect(function()
-	Remotes.Hatch:FireServer(1)
+	Net.fireServer("Hatch", 1)
 end)
 
 ui.hatch10Button.MouseButton1Click:Connect(function()
-	Remotes.Hatch:FireServer(10)
+	Net.fireServer("Hatch", 10)
 end)
 
 ui.dailyButton.MouseButton1Click:Connect(function()
-	Remotes.ClaimDaily:FireServer()
+	Net.fireServer("ClaimDaily")
 end)
 
 ui.codeSubmit.MouseButton1Click:Connect(function()
 	local code = ui.codeBox.Text
 	if #code > 0 then
-		Remotes.RedeemCode:FireServer(code)
+		Net.fireServer("RedeemCode", code)
 	end
 end)
 
-Remotes.CodeResult.OnClientEvent:Connect(function(ok, message)
+Net.onClient("CodeResult", function(ok, message)
 	ui.codeStatus.Text = message
 	ui.codeStatus.TextColor3 = ok and Color3.fromRGB(120, 255, 120) or Color3.fromRGB(255, 110, 110)
 	if ok then
@@ -149,12 +155,26 @@ Remotes.CodeResult.OnClientEvent:Connect(function(ok, message)
 end)
 
 UIBuilder.bindShop(ui, function(kind, key)
-	Remotes.PromptPurchase:FireServer(kind, key)
+	Net.fireServer("PromptPurchase", kind, key)
 end)
 
 -- ============================================================ server events
-Remotes.InitialData.OnClientEvent:Connect(function(data)
+Net.onClient("SettingsUpdate", function(s)
+	UI.applySettings(s)
+	AudioEngine.applySettings(s)
+end)
+
+Net.onClient("AchievementUnlocked", function(a)
+	UIBuilder.bigBanner(ui, ("%s unlocked!  +%s 💎"):format(a.name, Format.number(a.crystals)))
+	AudioEngine.playReward()
+end)
+
+Net.onClient("InitialData", function(data)
 	for k, v in data do state[k] = v end
+	if data.settings then
+		UI.applySettings(data.settings)
+		AudioEngine.applySettings(data.settings)
+	end
 	displayedGoo = data.goo
 	refreshTopBar(); refreshUpgrades(); refreshPets()
 	if data.daily and data.daily.canClaim then
@@ -165,7 +185,7 @@ Remotes.InitialData.OnClientEvent:Connect(function(data)
 	end
 end)
 
-Remotes.StateSync.OnClientEvent:Connect(function(s)
+Net.onClient("StateSync", function(s)
 	state.goo = s.goo
 	state.crystals = s.crystals
 	state.rebirths = s.rebirths
@@ -180,14 +200,15 @@ Remotes.StateSync.OnClientEvent:Connect(function(s)
 	refreshUpgrades()
 end)
 
-Remotes.UpgradeBought.OnClientEvent:Connect(function(id, level, spent)
+Net.onClient("UpgradeBought", function(id, level, spent)
 	state.upgrades[id] = level
 	displayedGoo -= spent
 	refreshUpgrades(); refreshTopBar()
 	UIBuilder.toast(ui, "Upgraded!")
+	AudioEngine.playPurchase()
 end)
 
-Remotes.Rebirthed.OnClientEvent:Connect(function(rebirths, crystals)
+Net.onClient("Rebirthed", function(rebirths, crystals)
 	state.rebirths = rebirths
 	state.upgrades = {}
 	displayedGoo = 0
@@ -195,7 +216,7 @@ Remotes.Rebirthed.OnClientEvent:Connect(function(rebirths, crystals)
 	UIBuilder.bigBanner(ui, ("REBIRTH %d!  +%s 💎"):format(rebirths, Format.number(crystals)))
 end)
 
-Remotes.HatchResult.OnClientEvent:Connect(function(results)
+Net.onClient("HatchResult", function(results)
 	for _, owned in results do
 		table.insert(state.pets, owned)
 	end
@@ -204,40 +225,41 @@ Remotes.HatchResult.OnClientEvent:Connect(function(results)
 	local def = GameConfig.getPet(last.id)
 	if def then
 		UIBuilder.hatchReveal(ui, def)
+		AudioEngine.playHatch(def.rarity)
 	end
 end)
 
-Remotes.EquipUpdate.OnClientEvent:Connect(function(equipped)
+Net.onClient("EquipUpdate", function(equipped)
 	state.equipped = equipped
 	refreshPets()
 end)
 
-Remotes.OfflineEarnings.OnClientEvent:Connect(function(amount, seconds)
+Net.onClient("OfflineEarnings", function(amount, seconds)
 	UIBuilder.offlinePopup(ui, amount, seconds)
 end)
 
-Remotes.ZoneUnlocked.OnClientEvent:Connect(function(zoneId)
+Net.onClient("ZoneUnlocked", function(zoneId)
 	local z = GameConfig.Zones[zoneId]
 	if z then UIBuilder.bigBanner(ui, ("UNLOCKED: %s (x%.1f)"):format(z.name, z.incomeMult)) end
 end)
 
-Remotes.DailyClaimed.OnClientEvent:Connect(function(day, reward)
+Net.onClient("DailyClaimed", function(day, reward)
 	UIBuilder.bigBanner(ui, ("Day %d claimed! +%s 💎"):format(day, Format.number(reward.crystals)))
 end)
 
-Remotes.Announce.OnClientEvent:Connect(function(msg)
+Net.onClient("Announce", function(msg)
 	UIBuilder.announce(ui, msg)
 end)
 
-Remotes.Notify.OnClientEvent:Connect(function(msg)
+Net.onClient("Notify", function(msg)
 	UIBuilder.toast(ui, msg)
 end)
 
-Remotes.PurchaseSuccess.OnClientEvent:Connect(function(name)
+Net.onClient("PurchaseSuccess", function(name)
 	UIBuilder.bigBanner(ui, "Purchase complete — thank you!")
 end)
 
-Remotes.LeaderboardUpdate.OnClientEvent:Connect(function(top)
+Net.onClient("LeaderboardUpdate", function(top)
 	UIBuilder.renderLeaderboard(ui, top)
 end)
 

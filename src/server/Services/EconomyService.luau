@@ -9,7 +9,10 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-local GameConfig = require(ReplicatedStorage.Modules.GameConfig)
+local Modules = ReplicatedStorage:WaitForChild("Modules")
+local GameConfig = require(Modules.GameConfig)
+local Net = require(Modules.Net)
+local Registry = require(Modules.ServiceRegistry)
 local DataManager = require(script.Parent.DataManager)
 
 local EconomyService = {}
@@ -20,9 +23,13 @@ local runtime: { [Player]: any } = {}
 -- Server-wide boost from the ServerBoost dev product.
 local serverBoost = { mult = 1, expires = 0 }
 
-local Remotes -- injected by Bootstrap
+function EconomyService:onPlayerAdded(player: Player)
+	EconomyService.setupPlayer(player)
+end
 
-function EconomyService.setRemotes(r) Remotes = r end
+function EconomyService:onPlayerRemoving(player: Player)
+	EconomyService.cleanupPlayer(player)
+end
 
 function EconomyService.setupPlayer(player: Player)
 	runtime[player] = {
@@ -123,7 +130,9 @@ function EconomyService.checkZone(player: Player)
 		if data.lifetimeGoo >= GameConfig.Zones[i].requiredLifetime then
 			if data.zone < i then
 				data.zone = i
-				Remotes.ZoneUnlocked:FireClient(player, i)
+				Net.fireClient("ZoneUnlocked", player, i)
+				local ach = Registry.tryGet("AchievementService")
+				if ach then ach:setStat(player, "zonesUnlocked", i) end
 			end
 			break
 		end
@@ -161,6 +170,9 @@ function EconomyService.handleClicks(player: Player, count: any)
 
 	rt.clickBudget -= granted
 	EconomyService.addGoo(player, granted * EconomyService.getClickPower(player))
+
+	local ach = Registry.tryGet("AchievementService")
+	if ach then ach:bump(player, "totalClicks", granted) end
 end
 
 -- ---------------------------------------------------------- upgrades
@@ -188,7 +200,9 @@ function EconomyService.buyUpgrade(player: Player, upgradeId: any, requestedAmou
 
 	if bought > 0 then
 		data.upgrades[upgradeId] = level
-		Remotes.UpgradeBought:FireClient(player, upgradeId, level, spent)
+		Net.fireClient("UpgradeBought", player, upgradeId, level, spent)
+		local ach = Registry.tryGet("AchievementService")
+		if ach then ach:bump(player, "upgradesBought", bought) end
 	end
 end
 
@@ -205,7 +219,9 @@ function EconomyService.rebirth(player: Player)
 	data.rebirths += 1
 	data.crystals += gained
 	-- NOTE: lifetimeGoo, pets and zone are deliberately preserved.
-	Remotes.Rebirthed:FireClient(player, data.rebirths, gained)
+	Net.fireClient("Rebirthed", player, data.rebirths, gained)
+	local ach = Registry.tryGet("AchievementService")
+	if ach then ach:setStat(player, "rebirths", data.rebirths) end
 end
 
 -- ---------------------------------------------------------- boosts
@@ -225,7 +241,7 @@ function EconomyService.grantServerBoost(buyer: Player, mult: number, seconds: n
 	serverBoost.mult = math.max(serverBoost.mult, mult)
 	serverBoost.expires = math.max(serverBoost.expires, os.clock()) + seconds
 	-- The social broadcast IS the product. Everyone sees who paid.
-	Remotes.Announce:FireAllClients(("%s activated a server-wide %dx boost!"):format(buyer.DisplayName, mult))
+	Net.fireAll("Announce", ("%s activated a server-wide %dx boost!"):format(buyer.DisplayName, mult))
 end
 
 -- ---------------------------------------------------------- offline earnings
@@ -242,12 +258,18 @@ function EconomyService.applyOfflineEarnings(player: Player)
 	if earned <= 0 then return 0 end
 
 	EconomyService.addGoo(player, earned)
-	Remotes.OfflineEarnings:FireClient(player, earned, capped)
+	Net.fireClient("OfflineEarnings", player, earned, capped)
+	local ach = Registry.tryGet("AchievementService")
+	if ach then ach:setStat(player, "maxOfflineClaimed", capped) end
 	return earned
 end
 
 -- ---------------------------------------------------------- loops
-function EconomyService.init()
+function EconomyService:start()
+	Net.onServer("Click", function(player, count) EconomyService.handleClicks(player, count) end)
+	Net.onServer("BuyUpgrade", function(player, id, amount) EconomyService.buyUpgrade(player, id, amount) end)
+	Net.onServer("Rebirth", function(player) EconomyService.rebirth(player) end)
+
 	-- ONE loop for every player. Never one loop per player — that is how idle
 	-- games melt their servers at 30 concurrent.
 	task.spawn(function()
@@ -270,7 +292,7 @@ function EconomyService.init()
 			for _, player in Players:GetPlayers() do
 				local data = DataManager.get(player)
 				if data then
-					Remotes.StateSync:FireClient(player, {
+					Net.fireClient("StateSync", player, {
 						goo = data.goo,
 						crystals = data.crystals,
 						rebirths = data.rebirths,

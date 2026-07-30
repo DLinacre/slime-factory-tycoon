@@ -20,6 +20,16 @@ else
   bad "balance outside targets -- see warnings above"
 fi
 
+say "Luau syntax (all modules must compile)"
+if command -v luau-compile >/dev/null 2>&1; then
+  syn=0
+  while IFS= read -r f; do
+    out=$(luau-compile --binary "$f" 2>&1 >/dev/null)
+    [ -n "$out" ] && { bad "$f"; echo "$out" | head -3; syn=1; }
+  done < <(find src -name '*.luau' | sort)
+  [ $syn -eq 0 ] && ok "all $(find src -name '*.luau' | wc -l) modules compile"
+else skip "luau-compile"; fi
+
 say "Lint"
 if command -v selene >/dev/null 2>&1; then
   selene src && ok "selene" || bad "selene"

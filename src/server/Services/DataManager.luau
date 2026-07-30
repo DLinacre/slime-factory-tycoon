@@ -44,7 +44,17 @@ local TEMPLATE = {
 	totalPlaytime = 0,
 	purchaseHistory = {}, -- [receiptId] = true  (idempotency for dev products)
 	redeemedCodes = {},   -- [code] = true
-	version = 1,
+
+	-- framework additions
+	stats = {},             -- [statKey] = number   (drives achievements + cosmetics)
+	achievements = {},      -- [achievementId] = unlockTimestamp
+	cosmetics = {},         -- [cosmeticId] = true
+	equippedCosmetics = {}, -- [category] = cosmeticId
+	settings = {},          -- [settingKey] = value
+	inventory = {},         -- [kind] = { items }
+	seasonProgress = {},    -- [seasonId] = points
+
+	version = 2,
 }
 
 -- Fills in any keys added in a later update without touching existing values.
@@ -142,7 +152,7 @@ function DataManager.release(player: Player)
 	loaded[player] = nil
 end
 
-function DataManager.init()
+function DataManager:init()
 	Players.PlayerRemoving:Connect(function(player)
 		DataManager.release(player)
 	end)

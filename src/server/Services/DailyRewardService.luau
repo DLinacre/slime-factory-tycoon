@@ -5,14 +5,22 @@
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local GameConfig = require(ReplicatedStorage.Modules.GameConfig)
+local Modules = ReplicatedStorage:WaitForChild("Modules")
+local GameConfig = require(Modules.GameConfig)
+local Net = require(Modules.Net)
+local Registry = require(Modules.ServiceRegistry)
 local DataManager = require(script.Parent.DataManager)
 
 local DailyRewardService = {}
 local DAY = 86400
 
-local Remotes, Economy, Pets
-function DailyRewardService.inject(r, e, p) Remotes, Economy, Pets = r, e, p end
+local Economy, Pets
+
+function DailyRewardService:start()
+	Economy = Registry.get("EconomyService")
+	Pets = Registry.get("PetService")
+	Net.onServer("ClaimDaily", function(player) DailyRewardService.claim(player) end)
+end
 
 local function dayIndex(t: number): number
 	return math.floor(t / DAY)
@@ -55,7 +63,10 @@ function DailyRewardService.claim(player: Player)
 	if reward.boost then Economy.grantBoost(player, reward.boost.mult, reward.boost.seconds) end
 	if reward.guaranteedRarity then Pets.grantRandomOfRarity(player, reward.guaranteedRarity) end
 
-	Remotes.DailyClaimed:FireClient(player, data.dailyStreak, reward)
+	Net.fireClient("DailyClaimed", player, data.dailyStreak, reward)
+
+	local ach = Registry.tryGet("AchievementService")
+	if ach then ach:setStat(player, "bestStreak", data.dailyStreak) end
 end
 
 return DailyRewardService

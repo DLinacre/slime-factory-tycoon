@@ -8,6 +8,9 @@
 local DataStoreService = game:GetService("DataStoreService")
 local Players = game:GetService("Players")
 
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Modules = ReplicatedStorage:WaitForChild("Modules")
+local Net = require(Modules.Net)
 local DataManager = require(script.Parent.DataManager)
 
 local LeaderboardService = {}
@@ -20,8 +23,6 @@ local READ_INTERVAL = 120
 local TOP_N = 50
 
 local cachedTop = { rebirths = {}, goo = {} }
-local Remotes
-function LeaderboardService.setRemotes(r) Remotes = r end
 
 local function readBoard(store, key)
 	local ok, pages = pcall(function()
@@ -44,13 +45,13 @@ function LeaderboardService.getTop()
 	return cachedTop
 end
 
-function LeaderboardService.init()
+function LeaderboardService:start()
 	task.spawn(function()
 		while true do
 			readBoard(rebirthBoard, "rebirths")
 			task.wait(1)
 			readBoard(gooBoard, "goo")
-			Remotes.LeaderboardUpdate:FireAllClients(cachedTop)
+			Net.fireAll("LeaderboardUpdate", cachedTop)
 			task.wait(READ_INTERVAL)
 		end
 	end)

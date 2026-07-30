@@ -5,18 +5,29 @@
 ]]
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Modules = ReplicatedStorage:WaitForChild("Modules")
 local HttpService = game:GetService("HttpService")
 
-local GameConfig = require(ReplicatedStorage.Modules.GameConfig)
+local GameConfig = require(Modules.GameConfig)
+local Net = require(Modules.Net)
+local Registry = require(Modules.ServiceRegistry)
 local DataManager = require(script.Parent.DataManager)
 
 local PetService = {}
 local cooldowns: { [Player]: number } = {}
 local rng = Random.new()
 
-local Remotes, Monetization
-function PetService.setRemotes(r) Remotes = r end
-function PetService.setMonetization(m) Monetization = m end
+local Monetization
+
+function PetService:start()
+	Monetization = Registry.get("MonetizationService")
+	Net.onServer("Hatch", function(player, count) PetService.hatch(player, count) end)
+	Net.onServer("EquipPet", function(player, uid) PetService.equip(player, uid) end)
+end
+
+function PetService:onPlayerRemoving(player: Player)
+	PetService.cleanupPlayer(player)
+end
 
 function PetService.clearCooldown(player: Player)
 	cooldowns[player] = 0
@@ -73,13 +84,24 @@ function PetService.hatch(player: Player, count: any)
 
 	if #results == 0 then return end
 	cooldowns[player] = now + GameConfig.EggCooldown
-	Remotes.HatchResult:FireClient(player, results)
+	Net.fireClient("HatchResult", player, results)
+
+	local ach = Registry.tryGet("AchievementService")
+	if ach then
+		ach:bump(player, "petsHatched", #results)
+		local legendary = 0
+		for _, o in results do
+			local d = GameConfig.getPet(o.id)
+			if d and d.rarity == "Legendary" then legendary += 1 end
+		end
+		if legendary > 0 then ach:bump(player, "legendariesHatched", legendary) end
+	end
 
 	-- Legendary announcements make the whole server want to hatch. Free marketing.
 	for _, owned in results do
 		local def = GameConfig.getPet(owned.id)
 		if def and def.rarity == "Legendary" then
-			Remotes.Announce:FireAllClients(("%s hatched a %s!"):format(player.DisplayName, def.name))
+			Net.fireAll("Announce", ("%s hatched a %s!"):format(player.DisplayName, def.name))
 		end
 	end
 end
@@ -89,7 +111,7 @@ function PetService.grantPet(player: Player, petId: string)
 	if not data or not GameConfig.getPet(petId) then return end
 	local owned = { id = petId, uid = HttpService:GenerateGUID(false) }
 	table.insert(data.pets, owned)
-	Remotes.HatchResult:FireClient(player, { owned })
+	Net.fireClient("HatchResult", player, { owned })
 end
 
 function PetService.grantRandomOfRarity(player: Player, rarity: string)
@@ -121,18 +143,18 @@ function PetService.equip(player: Player, uid: any)
 	for i, e in data.equipped do
 		if e == uid then
 			table.remove(data.equipped, i)
-			Remotes.EquipUpdate:FireClient(player, data.equipped)
+			Net.fireClient("EquipUpdate", player, data.equipped)
 			return
 		end
 	end
 
 	if #data.equipped >= PetService.maxSlots(player) then
-		Remotes.Notify:FireClient(player, "Pet slots full! Get +5 slots in the shop.")
+		Net.fireClient("Notify", player, "Pet slots full! Get +5 slots in the shop.")
 		return
 	end
 
 	table.insert(data.equipped, uid)
-	Remotes.EquipUpdate:FireClient(player, data.equipped)
+	Net.fireClient("EquipUpdate", player, data.equipped)
 end
 
 return PetService
