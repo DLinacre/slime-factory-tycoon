@@ -1,0 +1,26 @@
+# Rojo / Roblox build output
+*.rbxl
+*.rbxlx
+*.rbxl.lock
+*.rbxlx.lock
+*.rbxm
+*.rbxmx
+
+# Wally
+/Packages
+/ServerPackages
+/DevPackages
+wally.lock
+
+# Tooling
+.DS_Store
+Thumbs.db
+__pycache__/
+*.pyc
+.vscode/
+.idea/
+sourcemap.json
+
+# Never commit secrets
+.env
+*.token

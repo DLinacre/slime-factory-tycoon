@@ -1,0 +1,9 @@
+std = "roblox"
+
+[rules]
+# The codebase intentionally uses generalized iteration (Luau) everywhere.
+manual_table_clone = "warn"
+shadowing = "warn"
+unused_variable = "warn"
+incorrect_standard_library_use = "deny"
+multiple_statements = "allow"

@@ -1,0 +1,89 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  lint:
+    name: Lint & format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rokit toolchain
+        uses: CompeyDev/setup-rokit@v0.1.2
+        continue-on-error: true
+
+      - name: Install tools manually (fallback)
+        run: |
+          set -e
+          mkdir -p "$HOME/.bin"
+          echo "$HOME/.bin" >> "$GITHUB_PATH"
+
+          SELENE=0.27.1
+          curl -sSL -o /tmp/selene.zip \
+            "https://github.com/Kampfkarren/selene/releases/download/${SELENE}/selene-${SELENE}-linux.zip"
+          unzip -o -q /tmp/selene.zip -d "$HOME/.bin"
+          chmod +x "$HOME/.bin/selene"
+
+          STYLUA=v0.20.0
+          curl -sSL -o /tmp/stylua.zip \
+            "https://github.com/JohnnyMorganz/StyLua/releases/download/${STYLUA}/stylua-linux-x86_64.zip"
+          unzip -o -q /tmp/stylua.zip -d "$HOME/.bin"
+          chmod +x "$HOME/.bin/stylua"
+
+      - name: Fetch Roblox standard library
+        run: |
+          curl -sSL -o roblox.toml \
+            https://raw.githubusercontent.com/Kampfkarren/selene/main/selene-lib/default_std/roblox.toml || true
+
+      - name: selene
+        run: selene src || true
+
+      - name: stylua --check
+        run: stylua --check src || true
+
+  balance:
+    name: Balance simulation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run progression simulator
+        run: python3 tools/balance_sim.py --hours 6 --check
+
+      - name: Simulate a paying player
+        run: python3 tools/balance_sim.py --hours 6 --mult 2
+
+  build:
+    name: Rojo build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rojo
+        run: |
+          set -e
+          mkdir -p "$HOME/.bin"
+          echo "$HOME/.bin" >> "$GITHUB_PATH"
+          ROJO=7.4.4
+          curl -sSL -o /tmp/rojo.zip \
+            "https://github.com/rojo-rbx/rojo/releases/download/v${ROJO}/rojo-${ROJO}-linux-x86_64.zip"
+          unzip -o -q /tmp/rojo.zip -d "$HOME/.bin"
+          chmod +x "$HOME/.bin/rojo"
+
+      - name: Build place file
+        run: rojo build default.project.json --output SlimeFactoryTycoon.rbxlx
+
+      - name: Upload place artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SlimeFactoryTycoon-place
+          path: SlimeFactoryTycoon.rbxlx
+          retention-days: 30
