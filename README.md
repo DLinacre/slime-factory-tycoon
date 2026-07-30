@@ -31,6 +31,8 @@ It's the **idle/incremental** genre, chosen deliberately: it has the best revenu
 
 | | |
 |---|---|
+| **Modular service architecture** | Services are auto-discovered and started in a defined lifecycle. Adding a system means adding a file — `Bootstrap` never changes. |
+| **Declarative networking** | Every remote is declared once with its validator and rate limit. Validation you have to remember is validation you'll forget. |
 | **Server-authoritative everything** | The client sends *intent* ("I tapped 5 times"), never *value*. Exploiters gain nothing. |
 | **Session-locked DataStores** | Atomic `UpdateAsync` locking kills the #1 cause of item duplication. |
 | **Idempotent receipts** | `ProcessReceipt` keyed by `PurchaseId`, saved before confirming. No double-grants, no charged-for-nothing. |
@@ -80,27 +82,56 @@ No tooling required. Follow [`SETUP.md`](SETUP.md) — it lists the exact Explor
 slime-factory-tycoon/
 ├── src/
 │   ├── shared/                    → ReplicatedStorage/Modules
-│   │   ├── GameConfig.luau        ★ ALL game design lives here
+│   │   ├── GameConfig.luau        ★ economy, zones, pets, prices
+│   │   ├── Content.luau           ★ achievements, cosmetics, settings, seasons
+│   │   ├── Theme.luau             ★ colour, type, motion, breakpoints
+│   │   ├── Net.luau                 declarative remotes + validators + rate limits
+│   │   ├── Validate.luau            composable argument validators
+│   │   ├── ServiceRegistry.luau     service locator + lifecycle
 │   │   └── Format.luau              number abbreviation (1.2K / 3.4M / 5.6aa)
 │   ├── server/                    → ServerScriptService
-│   │   ├── Bootstrap.server.luau    the only Script; creates remotes, wires services
-│   │   └── Services/
+│   │   ├── Bootstrap.server.luau    build → register → start. Nothing else.
+│   │   └── Services/                auto-discovered, no manual wiring
 │   │       ├── DataManager.luau         session-locked saves, autosave, BindToClose
-│   │       ├── EconomyService.luau      authoritative income, clicks, upgrades, anti-cheat
+│   │       ├── EconomyService.luau      authoritative income, clicks, anti-cheat
 │   │       ├── MonetizationService.luau gamepasses + idempotent ProcessReceipt
 │   │       ├── PetService.luau          server-side hatch RNG, published odds
+│   │       ├── InventoryService.luau    generic UID-keyed containers
+│   │       ├── AchievementService.luau  stat-driven unlocks
+│   │       ├── CosmeticService.luau     cosmetics (no economy access by design)
+│   │       ├── SettingsService.luau     server-persisted, cross-device
 │   │       ├── DailyRewardService.luau  7-day streak
 │   │       ├── LeaderboardService.luau  OrderedDataStore, throttled
 │   │       └── CodeService.luau         promo codes
 │   └── client/                    → StarterPlayer/StarterPlayerScripts
 │       ├── ClientMain.client.luau   input, prediction, batched remotes
-│       └── UIBuilder.luau           builds the whole interface in code
+│       ├── UI.luau                  themed component library
+│       ├── AudioEngine.luau         pooled procedural SFX
+│       └── UIBuilder.luau           screen composition
 ├── tools/
-│   └── balance_sim.py             progression simulator (runs in CI)
-├── .github/workflows/ci.yml       lint · balance check · rojo build
-├── default.project.json           Rojo mapping
-└── docs → STRATEGY · SETUP · SECURITY · OPTIMISATION · LAUNCH
+│   ├── balance_sim.py             progression simulator (runs in CI)
+│   ├── sync_site.py               one-way sync to linacre.site
+│   └── verify.sh                  every CI gate, locally
+├── assets/                        logo · icon set · banner (PNG + WebP)
+├── game.manifest.json             machine-readable project data
+└── docs → STRATEGY · SETUP · SECURITY · OPTIMISATION · LAUNCH · BRAND
 ```
+
+## Adding content
+
+The whole point of the architecture. Each of these is a **single row** in a data file, with no other code change:
+
+| To add a… | Edit | Result |
+|---|---|---|
+| Upgrade | `GameConfig.Upgrades` | Appears in the shop, priced, balanced |
+| Zone | `GameConfig.Zones` | Unlocks at its threshold, applies its multiplier |
+| Pet | `GameConfig.Pets` | Enters the hatch pool at its rarity weight |
+| Achievement | `Content.Achievements` | Tracks its stat, grants its reward automatically |
+| Cosmetic | `Content.Cosmetics` | Unlocks by progression, crystals, or Robux |
+| Setting | `Content.Settings` | Renders, validates, and persists itself |
+| Remote | `Net.REMOTES` | Created, validated, and rate-limited automatically |
+
+Adding a **service** is one file in `src/server/Services/` — it's discovered and started automatically.
 
 ---
 
@@ -184,15 +215,46 @@ Deliberately *not* included: client-side anti-cheat, remote name obfuscation, au
 | [SECURITY.md](SECURITY.md) | Exploits, dupe bugs, remote hardening, DataStore protection |
 | [OPTIMISATION.md](OPTIMISATION.md) | Mobile-first performance, server load, load times |
 | [LAUNCH.md](LAUNCH.md) | Release checklist, Roblox SEO, icon/thumbnail ideas, analytics to watch |
+| [BRAND.md](BRAND.md) | Palette semantics, typography, motion, accessibility, voice |
 
 ---
+
+## Monetisation ethics
+
+The line is drawn structurally, not by good intentions:
+
+- **`CosmeticService` has no access to the economy multiplier.** Pay-to-win isn't discouraged here, it's *unrepresentable* — a cosmetic physically cannot change income because the code path doesn't exist.
+- **No fake timers.** Any countdown is server-authoritative and real.
+- **Hatch odds are published in-game**, and the numbers shown are read from the same table the RNG uses.
+- **`showOffers` is a setting.** A player can turn every shop popup off permanently, and the game still works.
+- **Convenience, not gates.** The Auto-Clicker removes tedium; it doesn't unlock content. Nothing purchasable is required to see any part of the game.
+
+## Accessibility
+
+Not a backlog item. Shipped, persisted server-side, and synced across devices:
+
+- **Reduced Motion** — `UI.tween()` collapses to an instant property set, so *every* animation in the game respects it automatically rather than each call site remembering.
+- **High Contrast** — adds borders to interactive surfaces.
+- **Text Scale** — 80–150%.
+- **Colour-blind modes** — Deuteranopia, Protanopia, Tritanopia.
+- **44px minimum touch targets**, enforced in `UI.button`.
+- **Rarity is never colour alone** — always paired with a text label.
+
+## Website
+
+The project page at **[linacre.site/games](https://www.linacre.site/games)** renders directly from [`game.manifest.json`](game.manifest.json). `tools/sync_site.py` recomputes the stats from source and copies the manifest and art across, so the website can't drift from the repository — and can't display a number that isn't derived from the code.
+
+Where information genuinely doesn't exist yet (screenshots, the Roblox link), the page shows **"Coming Soon"** or a disabled **"Not Yet Available"** button. No placeholder imagery, no invented player counts.
 
 ## Roadmap
 
 - [x] Core loop, rebirths, zones, pets, dailies, leaderboards
 - [x] Promo code system
 - [x] Rojo project + CI + balance simulator
-- [ ] Seasonal event framework (reuses zone/pet config, swaps theme)
+- [x] Service architecture, declarative networking, content framework
+- [x] Achievements, cosmetics, inventory, settings, audio, UI library
+- [x] Visual identity + website integration
+- [ ] Seasonal event content (framework is in place, no season declared yet)
 - [ ] `AnalyticsService` funnel instrumentation
 - [ ] Trading (deliberately last — large dupe surface, low revenue at small scale)
 
