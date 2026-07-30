@@ -200,11 +200,17 @@ Deliberately *not* included: client-side anti-cheat, remote name obfuscation, au
 
 ## Contributing
 
-PRs welcome. CI runs `selene`, `stylua --check`, the balance simulator, and a Rojo build. If you change anything in `GameConfig.luau`, run the simulator locally first:
+PRs welcome. CI runs `selene`, `stylua --check`, the balance simulator, and a Rojo build. Run every CI check locally with one command — no tooling required beyond Python
+(lint/format/build steps auto-skip if the tools aren't installed):
 
 ```bash
-python3 tools/balance_sim.py --hours 6 --check
+./tools/verify.sh
 ```
+
+> **Note on the CI badge:** GitHub Actions requires Actions minutes to be enabled
+> on the account. If the badge shows failing with zero steps executed, that's a
+> billing/entitlement issue on the repo owner's account, not the code —
+> `./tools/verify.sh` runs the identical checks locally.
 
 ---
 
