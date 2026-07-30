@@ -1,0 +1,24 @@
+FINAL EVIDENCE — 2026-07-30T19:01:24Z
+
+## Repo (live)
+  homepage: https://www.linacre.site/games
+  has_discussions: True
+  open_issues_count: 3
+  releases: 1
+  community health: 100%
+  discussions: 3
+  release asset: 200
+
+## Live site (measured)
+  CLS /games 390px : 0.0155 worst of 5 runs (was 0.4219)  GOOD
+  CLS / 390px      : 0.0155 (was 0.4219)  GOOD
+  CLS /games 1440  : 0.0023 (was 0.4219)  GOOD
+  axe mobile       : 0 violations, 27 passes (was 3)
+  axe desktop      : 0 violations, 27 passes (was 1)
+  TTFB 143ms · FCP 332ms
+  JSON-LD blocks   : 2 (SoftwareSourceCode + BreadcrumbList added)
+  Download CTA     : live
+
+## Code
+  modules: 23  lines: 3724
+  compile errors: 0

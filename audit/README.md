@@ -1,6 +1,11 @@
 # Audit — Slime Factory Tycoon
 
-**Date:** 2026-07-30 · **Depth:** Full professional · **Overall: 72 / 100**
+**Date:** 2026-07-30 · **Depth:** Full professional
+**Overall: 72 → 88 / 100** after remediation — see [`Remediation-Report.md`](Remediation-Report.md)
+
+> ✅ **All 4 Critical and most High/Medium items are fixed, deployed, and
+> re-measured live.** CLS 0.4219 → 0.0155 site-wide · axe 0 violations on both
+> viewports · v0.3.0 released with a verified downloadable place file.
 
 > ⚠️ **Two brief inputs were auto-resolved incorrectly and are corrected here.**
 > The product is **Slime Factory Tycoon**, not "Github" (GitHub is the host).
@@ -85,7 +90,8 @@ no Vercel credentials.
 
 | Document | What's in it |
 |---|---|
-| **[Executive-Summary.md](Executive-Summary.md)** | Scores, strengths, weaknesses, top 7 actions |
+| **[Remediation-Report.md](Remediation-Report.md)** | ⭐ What was fixed, measured before/after, what remains |
+| **[Executive-Summary.md](Executive-Summary.md)** | Original scores, strengths, weaknesses, top 7 actions |
 | **[Full-Audit.md](Full-Audit.md)** | All 15 categories with tagged evidence |
 | **[Priority-Roadmap.md](Priority-Roadmap.md)** | Today → long-term, sequenced |
 | **[Developer-Tasks.md](Developer-Tasks.md)** | 28 tasks in GitHub Issues format |
