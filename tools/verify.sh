@@ -40,6 +40,13 @@ if command -v stylua >/dev/null 2>&1; then
   stylua --check src && ok "stylua" || bad "stylua (run: stylua src)"
 else skip "stylua"; fi
 
+say "Site manifest sync"
+if [ -d "../linacre.site" ]; then
+  python3 tools/sync_site.py --site ../linacre.site --check >/dev/null 2>&1 \
+    && ok "site manifest in sync" \
+    || bad "site manifest stale (run: python3 tools/sync_site.py --site ../linacre.site)"
+else skip "site repo not present"; fi
+
 say "Build"
 if command -v rojo >/dev/null 2>&1; then
   rojo build default.project.json --output /tmp/_verify.rbxlx >/dev/null \
