@@ -1,5 +1,9 @@
 # Security — the specific ways idle games get robbed
 
+> **Found a vulnerability?** Don't open a public issue — see
+> [`.github/SECURITY.md`](.github/SECURITY.md) for private reporting.
+> This document is the *threat model*; that one is the *reporting policy*.
+
 Exploiters have full control of the client. Assume every LocalScript is rewritten and every RemoteEvent is called with arbitrary arguments at arbitrary rates. The code in `src/` is built around that assumption; here's the map.
 
 ## 1. The one rule

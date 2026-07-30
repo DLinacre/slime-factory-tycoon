@@ -1,0 +1,27 @@
+name: Feature request
+description: Suggest an addition to the template
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This project deliberately rejects features that don't measurably improve
+        retention, engagement, or revenue. Please make that case below.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: impact
+    attributes:
+      label: Why is it worth the complexity?
+      description: Which metric moves — retention, session length, conversion?
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Simpler alternatives considered

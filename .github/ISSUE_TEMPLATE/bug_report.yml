@@ -1,0 +1,50 @@
+name: Bug report
+description: Something in the template doesn't work as documented
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. Please run `./tools/verify.sh` first — it catches
+        most setup issues and its output is useful here.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What you expected, and what actually happened.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open the place in Studio
+        2. ...
+    validations:
+      required: true
+  - type: dropdown
+    id: where
+    attributes:
+      label: Which area?
+      options:
+        - Economy / balance
+        - DataStore / saving
+        - Monetization / receipts
+        - Pets / hatching
+        - UI / client
+        - Rojo / tooling
+        - Docs
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: verify
+    attributes:
+      label: Output of ./tools/verify.sh
+      render: shell
+  - type: input
+    id: studio
+    attributes:
+      label: Roblox Studio version
