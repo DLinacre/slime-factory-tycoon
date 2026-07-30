@@ -291,8 +291,12 @@ of layout flow.
 
 - **[MEASURED]** 100 KB of fonts across three variable families (Inter 47KB,
   JetBrains Mono 31KB, Space Grotesk 22KB) — 42% of total page weight.
-  **Recommendation:** subset to `latin` only and preload just the one used
-  above the fold.
+  **Correction after inspection:** these are *already* optimally handled —
+  self-hosted, subset via `unicode-range` into latin/latin-ext, served with
+  `font-display: swap`, immutable caching, and all three preloaded. My initial
+  recommendation to subset and preload was wrong; the work was already done.
+  The only remaining lever would be dropping a typeface entirely, which is a
+  brand decision rather than a performance one.
 - **[OBSERVED]** The banner is the LCP element but is `loading="lazy"`.
   **Recommendation:** `loading="eager"` + `fetchpriority="high"`.
 - **[MEASURED]** `/` still at 0.1434 — needs the same treatment applied to

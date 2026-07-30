@@ -115,9 +115,10 @@ Publishing them as indexable pages targets real developer queries
 ### 14. Add `SoftwareSourceCode` + `BreadcrumbList` JSON-LD — 30 min
 Files ready in `Schema/`.
 
-### 15. Font optimisation — 2 h
-100KB across three variable families is 42% of page weight. Subset to `latin`,
-preload only the above-the-fold family.
+### 15. ~~Font optimisation~~ — CLOSED, no action needed
+Inspection showed the fonts were already self-hosted, `unicode-range` subset,
+`font-display: swap`, and preloaded. The original recommendation was based on
+total weight without checking how it was delivered. No work required.
 
 ### 16. Fix the LCP image loading strategy — 30 min
 The banner is the LCP element but is `loading="lazy"`. Switch to

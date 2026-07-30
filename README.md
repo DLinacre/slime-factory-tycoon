@@ -283,6 +283,64 @@ Most first Roblox games earn very little. The realistic path is: launch, read yo
 
 The developers who make money are overwhelmingly the ones who shipped update #12 — not the ones with the best initial idea. This template exists to make updates #2 through #12 cheap.
 
+## Stuck? Ask an AI
+
+<details>
+<summary><b>Copy this prompt into any LLM for personalised setup help</b></summary>
+
+The repo is small and well-commented, so an LLM with this context can usually
+unblock you faster than an issue can. Paste the following, then describe your
+problem:
+
+```
+You are helping me set up an open-source Roblox game template called
+Slime Factory Tycoon (github.com/LIN4CRE/slime-factory-tycoon).
+
+ARCHITECTURE
+- Luau, Rojo project. src/shared -> ReplicatedStorage/Modules,
+  src/server -> ServerScriptService, src/client -> StarterPlayerScripts.
+- One server Script (Bootstrap) which does: Net.build() to create remotes,
+  Registry.registerFolder(Services) to auto-discover services, Registry.start()
+  to run init() then start() on all of them.
+- Services are ModuleScripts in src/server/Services. They may implement
+  init(), start(), onPlayerAdded(player), onPlayerRemoving(player).
+  They resolve each other by name via ServiceRegistry.get("Name").
+- Remotes are DECLARED in src/shared/Net.luau with a validator and a cooldown.
+  Net.onServer(name, handler) applies both automatically.
+- All game design values live in src/shared/GameConfig.luau (economy, zones,
+  pets, prices) and src/shared/Content.luau (achievements, cosmetics,
+  settings, seasons). Never hardcode numbers in service code.
+
+KEY RULES
+- The client sends INTENT (e.g. "I tapped 5 times"), never VALUE. Any code
+  where the client sends a currency amount is a critical bug.
+- CosmeticService must never touch the economy multiplier (no pay-to-win).
+- One loop iterating all players, never one loop per player.
+
+COMMON GOTCHAS
+- DataStores fail silently unless Game Settings > Security > "Enable Studio
+  Access to API Services" is ON. This is the #1 cause of "saving is broken".
+- Gamepass/product IDs default to 0 and are skipped. Replace them with real
+  IDs from the Creator Dashboard.
+- Session locking will kick you if the same account loads on two servers.
+  Wait ~30s and rejoin.
+
+VERIFY
+- ./tools/verify.sh runs every check (config, balance sim, Luau compile,
+  lint, format, manifest sync, Rojo build) and skips tools that aren't
+  installed.
+- python3 tools/balance_sim.py --hours 6 models progression and fails if the
+  first rebirth falls outside 8-30 minutes.
+
+My problem is:
+```
+
+This is a convenience, not official support. If the AI is confidently wrong,
+[open an issue](https://github.com/LIN4CRE/slime-factory-tycoon/issues) — that's
+a documentation bug worth fixing.
+
+</details>
+
 ## FAQ
 
 **Can I sell a game made with this?**
