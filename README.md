@@ -76,7 +76,17 @@ A **complete, production-ready Roblox idle tycoon** you can publish today.
 
 ## Quick start
 
-### Option A — Rojo (recommended)
+### ⚡ Fastest path (publish in < 60 minutes)
+
+1. Download the `.rbxlx` from [Releases](https://github.com/DLinacre/slime-factory-tycoon/releases/latest)
+2. Open in Roblox Studio
+3. Enable **Game Settings → Security → Studio Access to API Services**
+4. Replace `id = 0` with your real Gamepass/Product IDs
+5. Publish!
+
+→ Full quickstart: **[QUICKSTART.md](QUICKSTART.md)**
+
+### Option A — Proper development (recommended)
 
 ```bash
 git clone https://github.com/DLinacre/slime-factory-tycoon.git
@@ -89,17 +99,7 @@ Install the **Rojo plugin** in Studio and click **Connect**.
 
 ### Option B — Zero tools
 
-1. Download the latest `.rbxlx` from the [Releases page](https://github.com/DLinacre/slime-factory-tycoon/releases/latest)
-2. Open in Roblox Studio
-
-### Quick Publish in Under 60 Minutes
-
-1. Enable **Game Settings → Security → Studio Access to API Services**
-2. Replace the `id = 0` placeholders in `GameConfig.luau` with your real Gamepass / Dev Product IDs
-3. (Optional) Run `./tools/verify.sh`
-4. Publish!
-
-→ Full step-by-step: [CUSTOMIZING.md](CUSTOMIZING.md)
+Download the latest `.rbxlx` from the [Releases page](https://github.com/DLinacre/slime-factory-tycoon/releases/latest) and open in Roblox Studio.
 
 ---
 
