@@ -4,8 +4,8 @@
 
 # Slime Factory Tycoon
 
-**Production-ready open-source Roblox idle tycoon template.**  
-Ship a real game in a weekend — all the hard parts (saves, security, monetization, balance) are already solved.
+**🟢 Production-ready open-source Roblox idle tycoon template**  
+**Ship a real game in a weekend** — all the hard parts (saves, security, monetization, balance) are already solved.
 
 [![Release](https://img.shields.io/github/v/release/DLinacre/slime-factory-tycoon?color=78FF78&label=release)](https://github.com/DLinacre/slime-factory-tycoon/releases/latest)
 [![Checks](https://img.shields.io/badge/checks-verify.sh%20passing-brightgreen)](tools/verify.sh)
@@ -19,7 +19,13 @@ Ship a real game in a weekend — all the hard parts (saves, security, monetizat
 
 </div>
 
-> **Publish in < 60 minutes** → [Quick Publish](#quick-publish-in-under-60-minutes) • [Full guide → CUSTOMIZING.md](CUSTOMIZING.md)
+> **🚀 Publish in under 60 minutes** — see the [Quickstart Guide](QUICKSTART.md)
+
+<div align="center">
+
+**⭐ Star this repo** if you use it — it helps others discover it!
+
+</div>
 
 ---
 
