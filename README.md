@@ -29,6 +29,31 @@
 
 ---
 
+## At a Glance
+
+| | |
+|---|---|
+| **Time to first publish** | < 60 minutes |
+| **Core loop** | Tap → Upgrade → Rebirth → Pets → Offline earnings |
+| **Content updates** | Edit one file (`GameConfig.luau`) |
+| **Security** | Fully server-authoritative + session locking |
+| **Balance** | Real Python simulator that gates CI |
+| **UI** | 100% code, mobile-first, accessibility built-in |
+| **License** | MIT — keep 100% of revenue |
+
+---
+
+## Support the project
+
+- ⭐ **Star** the repository
+- 🐛 Report issues or suggest features
+- 💡 Open a PR (we love balance tweaks with simulator proof!)
+- 📢 Share what you build with the template
+
+Every star and fork helps more people find a solid foundation instead of starting from scratch.
+
+---
+
 ## Screenshots
 
 <div align="center">
