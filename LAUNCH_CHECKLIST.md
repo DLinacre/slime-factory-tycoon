@@ -18,6 +18,7 @@ Copy this into your notes or a Notion page. Tick everything before publishing.
 - [ ] **Genre** set to "Tycoon" or "Simulation"
 - [ ] **Age rating** questionnaire completed
 - [ ] **Private servers** enabled (200 Robux is a good default)
+- [ ] **Test the web demo** at https://dlinacre.github.io/slime-factory-tycoon/ (or your Pages URL)
 
 ## Highly Recommended
 
@@ -27,14 +28,17 @@ Copy this into your notes or a Notion page. Tick everything before publishing.
 - [ ] Write a **YouTube / TikTok script** for launch day
 - [ ] Prepare **3 social media posts** (launch + 2 updates)
 - [ ] Set up **Discord** or group wall for community
+- [ ] Record a **30-60s gameplay video** and embed on your group / socials
+- [ ] Add a **"Like & Favourite"** call-to-action in description
 
 ## Polish & Discovery
 
 - [ ] Icon is high contrast and readable at small size
-- [ ] Thumbnails tell a story (progression, pets, rewards)
+- [ ] Thumbnails tell a story (progression, pets, rewards, rebirth)
 - [ ] Title uses update tag: `Slime Factory Tycoon 🟢 PETS!`
 - [ ] Description has clear hook + list of features + call to action
 - [ ] "Like & Favourite" + group link in description
+- [ ] Use the **web landing page** as your primary showcase link
 
 ## After Launch (Day 1–7)
 
@@ -42,6 +46,7 @@ Copy this into your notes or a Notion page. Tick everything before publishing.
 - [ ] Fix the **first 60 seconds** based on playtests
 - [ ] Ship at least **one small update** in the first week
 - [ ] Post update in your group + on socials
+- [ ] Collect feedback and add to `LAUNCH_ANNOUNCEMENT.md` for future posts
 
 ---
 
