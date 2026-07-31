@@ -3,8 +3,8 @@
   "schemaVersion": 1,
   "slug": "slime-factory-tycoon",
   "name": "Slime Factory Tycoon",
-  "tagline": "\ud83d\udfe2 Production-ready Roblox idle tycoon. Download the .rbxlx and publish a real game in under 60 minutes.",
-  "description": "A complete, production-grade open-source Roblox idle tycoon template. Features server-authoritative Luau, session-locked DataStores, idempotent monetization, CI balance simulator, mobile-first code-only UI, and full accessibility support. All the hard parts are done \u2014 just add your art and IDs.",
+  "tagline": "🟢 Production-ready Roblox idle tycoon. Download the .rbxlx and publish a real game in under 60 minutes.",
+  "description": "A complete, production-grade open-source Roblox idle tycoon template. Features server-authoritative Luau, session-locked DataStores, idempotent monetization, CI balance simulator, mobile-first code-only UI, and full accessibility support. All the hard parts are done — just add your art and IDs.",
   "status": "In development",
   "statusDetail": "Core systems complete. Download the .rbxlx and open it in Roblox Studio. Not yet published to Roblox.",
   "platform": "Roblox",
@@ -114,7 +114,7 @@
         "Added pooled procedural audio engine with pentatonic tap combo pitching",
         "Added themed UI component library with 44px minimum touch targets",
         "Established visual identity: logo, icon set, banner, and full brand guidelines",
-        "Published v0.3.0 with a downloadable .rbxlx place file \u2014 no toolchain required"
+        "Published v0.3.0 with a downloadable .rbxlx place file — no toolchain required"
       ]
     },
     {
@@ -163,7 +163,7 @@
   "stats": {
     "$comment": "Code metrics only. No player counts, visits, ratings or revenue figures are recorded here because the game is unpublished and any such number would be fabricated.",
     "luauModules": 23,
-    "linesOfLuau": 4100,
+    "linesOfLuau": 3724,
     "achievements": 16,
     "cosmetics": 15,
     "zones": 6,
