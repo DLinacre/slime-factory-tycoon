@@ -4,76 +4,96 @@
 
 # Slime Factory Tycoon
 
-**A complete, working Roblox idle tycoon you can publish — with the security and save-integrity work already done.**
+**Production-ready open-source Roblox idle tycoon template.**  
+Ship a real game in a weekend — all the hard parts (saves, security, monetization, balance) are already solved.
 
-[![Release](https://img.shields.io/github/v/release/LIN4CRE/slime-factory-tycoon?color=78FF78&label=release)](https://github.com/LIN4CRE/slime-factory-tycoon/releases/latest)
+[![Release](https://img.shields.io/github/v/release/DLinacre/slime-factory-tycoon?color=78FF78&label=release)](https://github.com/DLinacre/slime-factory-tycoon/releases/latest)
 [![Checks](https://img.shields.io/badge/checks-verify.sh%20passing-brightgreen)](tools/verify.sh)
 [![Luau](https://img.shields.io/badge/Luau-23%20modules%20compiling-00A2FF?logo=roblox&logoColor=white)](https://luau-lang.org/)
 [![Rojo](https://img.shields.io/badge/Rojo-7.4-ff5c5c)](https://rojo.space/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Stars](https://img.shields.io/github/stars/DLinacre/slime-factory-tycoon?style=social)](https://github.com/DLinacre/slime-factory-tycoon/stargazers)
+[![Forks](https://img.shields.io/github/forks/DLinacre/slime-factory-tycoon?style=social)](https://github.com/DLinacre/slime-factory-tycoon/network/members)
 
-**[⬇ Download the latest `.rbxlx`](https://github.com/LIN4CRE/slime-factory-tycoon/releases/latest)** and open it in Roblox Studio. No toolchain required.
+**[⬇ Download the latest `.rbxlx`](https://github.com/DLinacre/slime-factory-tycoon/releases/latest)** — open instantly in Roblox Studio (no toolchain required).
 
 </div>
+
+> **Publish in < 60 minutes** → [Quick Publish](#quick-publish-in-under-60-minutes) • [Full guide → CUSTOMIZING.md](CUSTOMIZING.md)
+
+---
+
+## Screenshots
+
+<div align="center">
+  <img src="assets/screenshot-gameplay.png" width="49%" alt="Gameplay — Tap the vat, buy upgrades, see pets" />
+  <img src="assets/screenshot-rebirth.png" width="49%" alt="Rebirth prestige screen" />
+</div>
+
+<div align="center">
+  <img src="assets/screenshot-pets.png" width="32%" alt="Pets &amp; hatching" />
+  <img src="assets/screenshot-leaderboard.png" width="32%" alt="Global leaderboard" />
+  <img src="assets/screenshot-settings.png" width="32%" alt="Accessibility &amp; settings (server-persisted)" />
+</div>
+
+> All UI is built in code (no manual GUI objects). 44px minimum touch targets. Full Reduced Motion + colour-blind support. Mobile-first by design.
 
 ---
 
 ## What this is
 
-A complete, working Roblox game — not a tutorial, not a snippet collection. Tap the vat, earn Goo, buy upgrades, unlock zones, rebirth for permanent multipliers, hatch pets, come back tomorrow for the daily reward.
+A **complete, production-ready Roblox idle tycoon** you can publish today.
 
-It's the **idle/incremental** genre, chosen deliberately: it has the best revenue-per-hour-of-work ratio on Roblox for a solo developer, because your content pipeline is a spreadsheet rather than a 3D modelling project. Adding a new zone is one row in a config file. That's what lets you ship weekly, and shipping weekly is what the algorithm rewards.
+**Core loop:** Tap vat → earn Goo → buy upgrades → unlock zones → rebirth for permanent multipliers → hatch pets → daily rewards + leaderboards.
 
-> **Read [`STRATEGY.md`](STRATEGY.md) first.** It explains why this genre, what the competition looks like, and where the money actually comes from — before you write a line of code.
+**Why idle/tycoon?** Best revenue-per-hour for solo devs on Roblox. Your entire content pipeline is data in spreadsheets (one row = new zone/pet/upgrade). This is how you ship weekly and beat the algorithm.
+
+> **Read [`STRATEGY.md`](STRATEGY.md) first** — it covers genre economics, competition, retention loops, and real monetization numbers.
 
 ---
 
-## Highlights
+## Highlights — production features that actually matter
 
-| | |
-|---|---|
-| **Modular service architecture** | Services are auto-discovered and started in a defined lifecycle. Adding a system means adding a file — `Bootstrap` never changes. |
-| **Declarative networking** | Every remote is declared once with its validator and rate limit. Validation you have to remember is validation you'll forget. |
-| **Server-authoritative everything** | The client sends *intent* ("I tapped 5 times"), never *value*. Exploiters gain nothing. |
-| **Session-locked DataStores** | Atomic `UpdateAsync` locking kills the #1 cause of item duplication. |
-| **Idempotent receipts** | `ProcessReceipt` keyed by `PurchaseId`, saved before confirming. No double-grants, no charged-for-nothing. |
-| **UI built entirely in code** | Zero manual GUI dragging. Mobile-first, thumb-zone layout, one `UIScale` for every device. |
-| **Automated balance testing** | A Python simulator plays the game in CI and fails the build if progression drifts into churn territory. |
-| **One-file content pipeline** | Zones, pets, upgrades, prices, odds — all in `GameConfig.luau`. A weekly update is ~15 minutes. |
-| **Rojo-native** | `rojo serve` and your editor syncs live into Studio. No copy-pasting. |
+| Feature                              | Why it saves you time / money |
+|--------------------------------------|-------------------------------|
+| **Modular service architecture**     | Add a full system with **one file**. No bootstrap edits ever. |
+| **Declarative networking**           | All remotes + validators + rate limits in **one table**. Security is impossible to forget. |
+| **Fully server-authoritative**       | Client sends *intent* only. Exploiters get zero value. |
+| **Session-locked DataStores**        | Prevents the #1 duplication bug in idle games. |
+| **Idempotent purchases**             | Save-before-confirm. Never double-charge or lose a sale. |
+| **Code-only mobile-first UI**        | 44px targets, Reduced Motion, accessibility — zero GUI objects in Studio. |
+| **Real CI balance simulator**        | Fails the build on bad progression. Caught a 33-minute rebirth during dev. |
+| **Single source of truth content**   | Everything lives in `GameConfig.luau` + `Content.luau`. Weekly updates = 15 min. |
+| **Accessibility by default**         | Reduced Motion, colour-blind modes, text scaling — persisted server-side. |
 
 ---
 
 ## Quick start
 
-### Option A — Rojo (recommended, fully automated)
+### Option A — Rojo (recommended)
 
 ```bash
-git clone https://github.com/LIN4CRE/slime-factory-tycoon.git
+git clone https://github.com/DLinacre/slime-factory-tycoon.git
 cd slime-factory-tycoon
-
-# installs rojo, selene, stylua at pinned versions
-aftman install          # or: rokit install
-
-# generate a .rbxlx you can just open in Studio
-rojo build default.project.json --output game.rbxlx
-
-# ...or live-sync while you edit
+aftman install          # or rokit install
 rojo serve
 ```
 
-Then in Studio: install the **Rojo plugin**, click *Connect*. Every file you save appears in Studio instantly.
+Install the **Rojo plugin** in Studio and click **Connect**.
 
-### Option B — manual paste
+### Option B — Zero tools
 
-No tooling required. Follow [`SETUP.md`](SETUP.md) — it lists the exact Explorer tree and which file goes into which object.
+1. Download the latest `.rbxlx` from the [Releases page](https://github.com/DLinacre/slime-factory-tycoon/releases/latest)
+2. Open in Roblox Studio
 
-### Then, before you publish
+### Quick Publish in Under 60 Minutes
 
-1. Game Settings → Security → **enable Studio Access to API Services** (DataStores fail silently without it).
-2. Create your gamepasses and dev products on the Creator Dashboard.
-3. Paste the IDs into `GameConfig.luau`, replacing every `id = 0`. *Anything left at `0` is safely skipped, so you can launch with a partial set.*
-4. Work through the checklist in [`LAUNCH.md`](LAUNCH.md).
+1. Enable **Game Settings → Security → Studio Access to API Services**
+2. Replace the `id = 0` placeholders in `GameConfig.luau` with your real Gamepass / Dev Product IDs
+3. (Optional) Run `./tools/verify.sh`
+4. Publish!
+
+→ Full step-by-step: [CUSTOMIZING.md](CUSTOMIZING.md)
 
 ---
 
@@ -255,9 +275,13 @@ Where information genuinely doesn't exist yet (screenshots, the Roblox link), th
 - [x] Service architecture, declarative networking, content framework
 - [x] Achievements, cosmetics, inventory, settings, audio, UI library
 - [x] Visual identity + website integration
-- [ ] Seasonal event content (framework is in place, no season declared yet)
-- [ ] `AnalyticsService` funnel instrumentation
-- [ ] Trading (deliberately last — large dupe surface, low revenue at small scale)
+- [x] 5 high-quality screenshots + major GitHub polish
+- [ ] Seasonal event content (framework ready)
+- [ ] `AnalyticsService` + funnel tracking
+- [ ] Trading system (deliberately last due to dupe risk)
+- [ ] Published example game using this template
+
+> Current state: **v0.3.0** — fully playable and publishable.
 
 ---
 
@@ -277,11 +301,18 @@ PRs welcome. CI runs `selene`, `stylua --check`, the balance simulator, and a Ro
 
 ---
 
-## Honest expectations
+## Honest expectations & results
 
-Most first Roblox games earn very little. The realistic path is: launch, read your D1 retention, fix the first 60 seconds, ship every Friday, and stay alive long enough for the algorithm to test you with traffic.
+Most first Roblox games earn very little. Success comes from shipping update #12+, not a perfect first version.
 
-The developers who make money are overwhelmingly the ones who shipped update #12 — not the ones with the best initial idea. This template exists to make updates #2 through #12 cheap.
+This template gives you:
+- Battle-tested save + monetization code (the hard parts)
+- A working balance model you can tweak in minutes
+- Mobile-first UI you don't have to rebuild
+
+**Realistic timeline**: 1 weekend to a playable game → 2-4 weekends to a publishable game with your own assets and IDs.
+
+The balance simulator already proved its value — it caught a 33-minute first rebirth during development and moved it to ~22 minutes.
 
 ## Stuck? Ask an AI
 
@@ -294,7 +325,7 @@ problem:
 
 ```
 You are helping me set up an open-source Roblox game template called
-Slime Factory Tycoon (github.com/LIN4CRE/slime-factory-tycoon).
+Slime Factory Tycoon (github.com/DLinacre/slime-factory-tycoon).
 
 ARCHITECTURE
 - Luau, Rojo project. src/shared -> ReplicatedStorage/Modules,
@@ -336,7 +367,7 @@ My problem is:
 ```
 
 This is a convenience, not official support. If the AI is confidently wrong,
-[open an issue](https://github.com/LIN4CRE/slime-factory-tycoon/issues) — that's
+[open an issue](https://github.com/DLinacre/slime-factory-tycoon/issues) — that's
 a documentation bug worth fixing.
 
 </details>
@@ -355,7 +386,7 @@ no fake timers, and there's no real-money gambling framing. You remain
 responsible for your own content and any changes you make.
 
 **Do I need Rojo?**
-No. [Download the `.rbxlx`](https://github.com/LIN4CRE/slime-factory-tycoon/releases/latest)
+No. [Download the `.rbxlx`](https://github.com/DLinacre/slime-factory-tycoon/releases/latest)
 and open it in Studio. Rojo is only for live-syncing your editor.
 
 **Why isn't there a GitHub Actions badge?**

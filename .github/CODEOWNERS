@@ -1,0 +1,22 @@
+# CODEOWNERS
+# These owners will be requested for review when someone opens a pull request.
+
+# Default owners for everything in the repo
+*       @LIN4CRE
+
+# Core gameplay & balance (very sensitive)
+src/shared/GameConfig.luau    @LIN4CRE
+src/shared/Content.luau       @LIN4CRE
+tools/balance_sim.py          @LIN4CRE
+
+# Security-critical files
+src/server/Services/DataManager.luau
+src/server/Services/MonetizationService.luau
+src/shared/Net.luau
+src/shared/Validate.luau
+
+# Documentation & onboarding
+README.md                     @LIN4CRE
+DEVELOPMENT.md                @LIN4CRE
+CUSTOMIZING.md                @LIN4CRE
+STRATEGY.md                   @LIN4CRE

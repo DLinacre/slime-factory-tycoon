@@ -9,7 +9,10 @@ stylua src                                    # format
 selene src                                    # lint
 python3 tools/balance_sim.py --hours 6 --check   # balance gate
 rojo build default.project.json -o /tmp/t.rbxlx  # it must build
+./tools/verify.sh                             # run the full suite
 ```
+
+See [DEVELOPMENT.md](DEVELOPMENT.md) for the full development workflow.
 
 ## Principles this codebase follows
 
@@ -21,4 +24,19 @@ rojo build default.project.json -o /tmp/t.rbxlx  # it must build
 
 ## Changing balance
 
-Any change to costs, growth rates, or multipliers must include the simulator output in the PR description, before and after.
+Any change to costs, growth rates, or multipliers **must** include the simulator output (`python3 tools/balance_sim.py --hours 6`) in the PR description, before and after.
+
+## Documentation
+
+- [DEVELOPMENT.md](DEVELOPMENT.md) — daily workflow, quality gates, debugging
+- [CUSTOMIZING.md](CUSTOMIZING.md) — how to turn the template into your published game
+- [STRATEGY.md](STRATEGY.md) — genre strategy and monetization
+- [LAUNCH.md](LAUNCH.md) — pre-publish checklist
+
+## New to the project?
+
+Most contributions are:
+- New rows in `GameConfig.luau` or `Content.luau`
+- Bug fixes in services
+- Documentation improvements
+- Balance tuning (with simulator proof)

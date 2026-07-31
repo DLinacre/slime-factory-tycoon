@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "slug": "slime-factory-tycoon",
   "name": "Slime Factory Tycoon",
-  "tagline": "Tap, automate, rebirth — an idle slime empire built to last.",
+  "tagline": "Tap, automate, rebirth \u2014 an idle slime empire built to last.",
   "description": "An open-source Roblox idle-tycoon built as a production-grade foundation rather than a prototype. Tap the vat to earn Goo, automate production, unlock factory zones, and rebirth for permanent multipliers. Under the hood it's a modular service architecture with a declarative networking layer, session-locked saves, idempotent purchase handling, and a CI balance simulator that plays the game on every commit.",
   "status": "In development",
   "statusDetail": "Core systems complete. Download the .rbxlx and open it in Roblox Studio. Not yet published to Roblox.",
@@ -21,12 +21,12 @@
     "Desktop"
   ],
   "links": {
-    "github": "https://github.com/LIN4CRE/slime-factory-tycoon",
+    "github": "https://github.com/DLinacre/slime-factory-tycoon",
     "roblox": null,
     "play": null,
     "devforum": null,
-    "release": "https://github.com/LIN4CRE/slime-factory-tycoon/releases/latest",
-    "download": "https://github.com/LIN4CRE/slime-factory-tycoon/releases/download/v0.3.0/SlimeFactoryTycoon-v0.3.0.rbxlx"
+    "release": "https://github.com/DLinacre/slime-factory-tycoon/releases/latest",
+    "download": "https://github.com/DLinacre/slime-factory-tycoon/releases/download/v0.3.0/SlimeFactoryTycoon-v0.3.0.rbxlx"
   },
   "brand": {
     "logo": "assets/logo.png",
@@ -91,7 +91,13 @@
     "Global leaderboards",
     "Seasonal event framework"
   ],
-  "screenshots": [],
+  "screenshots": [
+    "assets/screenshot-gameplay.png",
+    "assets/screenshot-rebirth.png",
+    "assets/screenshot-pets.png",
+    "assets/screenshot-leaderboard.png",
+    "assets/screenshot-settings.png"
+  ],
   "changelog": [
     {
       "version": "0.3.0",
@@ -108,7 +114,7 @@
         "Added pooled procedural audio engine with pentatonic tap combo pitching",
         "Added themed UI component library with 44px minimum touch targets",
         "Established visual identity: logo, icon set, banner, and full brand guidelines",
-        "Published v0.3.0 with a downloadable .rbxlx place file — no toolchain required"
+        "Published v0.3.0 with a downloadable .rbxlx place file \u2014 no toolchain required"
       ]
     },
     {
