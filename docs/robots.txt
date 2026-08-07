@@ -1,9 +1,0 @@
-# Recommended robots.txt for GitHub Pages
-
-User-agent: *
-Allow: /
-
-Sitemap: https://dlinacre.github.io/slime-factory-tycoon/sitemap.xml
-
-# Disallow admin or private paths if ever added
-Disallow: /admin/
