@@ -1,6 +1,6 @@
 # Full Audit — Slime Factory Tycoon
 
-**Surfaces:** **A** = `github.com/LIN4CRE/slime-factory-tycoon` · **B** = `linacre.site/games`
+**Surfaces:** **A** = `github.com/DLinacre/slime-factory-tycoon` · **B** = `linacre.site/games`
 Every finding is tagged **[MEASURED]**, **[OBSERVED]**, or **[JUDGEMENT]**.
 
 ---

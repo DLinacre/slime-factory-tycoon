@@ -75,7 +75,7 @@ in-game and read from the same table the RNG uses.
 
 ## Full changelog
 
-See [`game.manifest.json`](https://github.com/LIN4CRE/slime-factory-tycoon/blob/main/game.manifest.json) or the
+See [`game.manifest.json`](https://github.com/DLinacre/slime-factory-tycoon/blob/main/game.manifest.json) or the
 [project page](https://www.linacre.site/games).
 
 **MIT licensed.** Use it commercially, keep the Robux, no attribution required.

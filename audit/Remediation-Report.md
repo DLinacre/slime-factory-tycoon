@@ -33,7 +33,7 @@
 ### 🔴 Critical — all 4 complete
 
 **T-01 · Release with downloadable place file** ✅
-Published [`v0.3.0`](https://github.com/LIN4CRE/slime-factory-tycoon/releases/tag/v0.3.0)
+Published [`v0.3.0`](https://github.com/DLinacre/slime-factory-tycoon/releases/tag/v0.3.0)
 with `SlimeFactoryTycoon-v0.3.0.rbxlx` (127KB) attached.
 
 Built with Rojo 7.4.4 and structurally verified: **32 instances — 1 Script,

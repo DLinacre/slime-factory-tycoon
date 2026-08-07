@@ -38,14 +38,14 @@ template: |
 
   ## 📦 Download
 
-  **[⬇ SlimeFactoryTycoon-v${{ env.VERSION }}.rbxlx](https://github.com/LIN4CRE/slime-factory-tycoon/releases/download/v${{ env.VERSION }}/SlimeFactoryTycoon-v${{ env.VERSION }}.rbxlx)**
+  **[⬇ SlimeFactoryTycoon-v${{ env.VERSION }}.rbxlx](https://github.com/DLinacre/slime-factory-tycoon/releases/download/v${{ env.VERSION }}/SlimeFactoryTycoon-v${{ env.VERSION }}.rbxlx)**
 
   Open directly in Roblox Studio — no extra tools required.
 
   ## Quick Start
 
   ```bash
-  git clone https://github.com/LIN4CRE/slime-factory-tycoon.git
+  git clone https://github.com/DLinacre/slime-factory-tycoon.git
   cd slime-factory-tycoon
   aftman install
   rojo serve
@@ -53,9 +53,9 @@ template: |
 
   ## Full Documentation
 
-  - [README](https://github.com/LIN4CRE/slime-factory-tycoon#readme)
-  - [DEVELOPMENT.md](https://github.com/LIN4CRE/slime-factory-tycoon/blob/main/DEVELOPMENT.md)
-  - [CUSTOMIZING.md](https://github.com/LIN4CRE/slime-factory-tycoon/blob/main/CUSTOMIZING.md)
-  - [STRATEGY.md](https://github.com/LIN4CRE/slime-factory-tycoon/blob/main/STRATEGY.md)
+  - [README](https://github.com/DLinacre/slime-factory-tycoon#readme)
+  - [DEVELOPMENT.md](https://github.com/DLinacre/slime-factory-tycoon/blob/main/DEVELOPMENT.md)
+  - [CUSTOMIZING.md](https://github.com/DLinacre/slime-factory-tycoon/blob/main/CUSTOMIZING.md)
+  - [STRATEGY.md](https://github.com/DLinacre/slime-factory-tycoon/blob/main/STRATEGY.md)
 
   **MIT licensed** — use commercially, keep all revenue.

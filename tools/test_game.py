@@ -73,7 +73,7 @@ def test_balance_sim():
 
 def test_site_manifest_sync():
     print(" [TEST] Site manifest sync check...")
-    site_repo = Path("D:/LIN4CRE/linacre-site-repo")
+    site_repo = Path("D:/DLinacre/linacre-site-repo")
     if site_repo.exists():
         sync_script = ROOT / "tools" / "sync_site.py"
         res = subprocess.run([sys.executable, str(sync_script), "--site", str(site_repo), "--check"], capture_output=True, text=True)

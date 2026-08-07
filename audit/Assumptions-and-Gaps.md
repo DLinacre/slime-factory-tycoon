@@ -22,7 +22,7 @@ as context. These are different things and are scored separately:
 
 | Surface | What it is | Who it serves | What I can control |
 |---|---|---|---|
-| **A. The repository** | `github.com/LIN4CRE/slime-factory-tycoon` | Developers evaluating a template | README, docs, topics, community files, repo metadata |
+| **A. The repository** | `github.com/DLinacre/slime-factory-tycoon` | Developers evaluating a template | README, docs, topics, community files, repo metadata |
 | **B. The project page** | `linacre.site/games` | Players, recruiters, general visitors | Full HTML/CSS/JS, headers, SEO, performance |
 
 Surface A is rendered inside GitHub's chrome. I cannot change GitHub's CSS,

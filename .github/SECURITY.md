@@ -10,7 +10,7 @@ reporting.
 
 **Do not open a public issue for a security problem.**
 
-Use GitHub's [private vulnerability reporting](https://github.com/LIN4CRE/slime-factory-tycoon/security/advisories/new),
+Use GitHub's [private vulnerability reporting](https://github.com/DLinacre/slime-factory-tycoon/security/advisories/new),
 or contact the maintainer via [linacre.site](https://www.linacre.site).
 
 Expect an acknowledgement within 7 days.

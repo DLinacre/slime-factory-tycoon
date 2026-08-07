@@ -1,7 +1,7 @@
 # Executive Summary
 
 **Target:** Slime Factory Tycoon — open-source Roblox idle-tycoon template
-**Surfaces:** `github.com/LIN4CRE/slime-factory-tycoon` (repo) + `linacre.site/games` (project page)
+**Surfaces:** `github.com/DLinacre/slime-factory-tycoon` (repo) + `linacre.site/games` (project page)
 **Date:** 2026-07-30 · **Depth:** Full professional
 
 > ⚠️ The brief auto-resolved the product name as "Github" and the market as

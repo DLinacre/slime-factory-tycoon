@@ -22,7 +22,7 @@ These are different artefacts with different controllable surfaces:
 
 | | Surface A | Surface B |
 |---|---|---|
-| **URL** | `github.com/LIN4CRE/slime-factory-tycoon` | `linacre.site/games` |
+| **URL** | `github.com/DLinacre/slime-factory-tycoon` | `linacre.site/games` |
 | **Audience** | Developers evaluating a template | Players, recruiters, visitors |
 | **Controllable** | README, docs, topics, metadata | Full HTML/CSS/JS, headers, SEO |
 

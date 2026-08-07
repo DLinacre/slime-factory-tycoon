@@ -35,7 +35,7 @@ and save-integrity work already done.**
 > **Try it in 30 seconds:** [download the latest `.rbxlx`][latest] and open it
 > in Studio. No toolchain required.
 
-[latest]: https://github.com/LIN4CRE/slime-factory-tycoon/releases/latest
+[latest]: https://github.com/DLinacre/slime-factory-tycoon/releases/latest
 ```
 
 **Why:** the current README is 1,984 words. The evaluate-or-leave decision
